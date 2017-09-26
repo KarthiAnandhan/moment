@@ -34,7 +34,10 @@ func (d *Diff) InWeeks() int {
 }
 
 func (d *Diff) InMonths() int {
-	return 0
+	// 400 years have 146097 days (taking into account leap year rules)
+	// 400 years have 12 months === 4800
+	days := d.InDays()
+	return days * 4800 / 146097
 }
 
 func (d *Diff) InYears() int {
@@ -67,9 +70,20 @@ func (d *Diff) Humanize() string {
 		return "a day ago"
 	}
 
-	return "diff is in days"
+	diffInDays := d.InDays()
+
+	if diffInDays <= 30 {
+		return fmt.Sprintf("%d days ago", diffInDays)
+	} else if diffInDays <= 31 {
+		return "about 1 month ago"
+	}
+
+	diffInMonths := d.InMonths()
+
+	if diffInMonths <= 12 {
+		return fmt.Sprintf("%d month ago", diffInMonths)
+	} else if diffInMonths <= 13 {
+		return "about 1 year ago"
+	}
+	return "diff is in Years"
 }
-
-// In Months
-
-// In years
