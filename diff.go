@@ -44,46 +44,54 @@ func (d *Diff) InYears() int {
 	return 0
 }
 
+func (d *Diff) CustomHumanize(ignoreAgo bool) string {
+	humanizedStr := d.Humanize()
+	if !ignoreAgo {
+		humanizedStr = humanizedStr + " " + "ago"
+	}
+	return humanizedStr
+}
+
 // http://momentjs.com/docs/#/durations/humanize/
 func (d *Diff) Humanize() string {
 	diffInSeconds := d.InSeconds()
 
 	if diffInSeconds <= 45 {
-		return fmt.Sprintf("%d seconds ago", diffInSeconds)
+		return fmt.Sprintf("%d seconds", diffInSeconds)
 	} else if diffInSeconds <= 90 {
-		return "a minute ago"
+		return "a minute"
 	}
 
 	diffInMinutes := d.InMinutes()
 
 	if diffInMinutes <= 45 {
-		return fmt.Sprintf("%d minutes ago", diffInMinutes)
+		return fmt.Sprintf("%d minutes", diffInMinutes)
 	} else if diffInMinutes <= 90 {
-		return "an hour ago"
+		return "an hour"
 	}
 
 	diffInHours := d.InHours()
 
 	if diffInHours <= 22 {
-		return fmt.Sprintf("%d hours ago", diffInHours)
+		return fmt.Sprintf("%d hours", diffInHours)
 	} else if diffInHours <= 36 {
-		return "a day ago"
+		return "a day"
 	}
 
 	diffInDays := d.InDays()
 
 	if diffInDays <= 30 {
-		return fmt.Sprintf("%d days ago", diffInDays)
+		return fmt.Sprintf("%d days", diffInDays)
 	} else if diffInDays <= 31 {
-		return "about 1 month ago"
+		return "about 1 month"
 	}
 
 	diffInMonths := d.InMonths()
 
 	if diffInMonths <= 12 {
-		return fmt.Sprintf("%d month ago", diffInMonths)
+		return fmt.Sprintf("%d month", diffInMonths)
 	} else if diffInMonths <= 13 {
-		return "about 1 year ago"
+		return "about 1 year"
 	}
-	return "diff is in Years"
+	return "many years"
 }
