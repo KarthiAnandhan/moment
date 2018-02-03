@@ -84,6 +84,8 @@ func (d *Diff) Humanize() string {
 	diffInDays := d.InDays()
 
 	if diffInDays <= 30 {
+		// always add 1 in diff
+		diffInDays = diffInDays + 1
 		if diffInDays == 1 {
 			return fmt.Sprintf("%d day", diffInDays)
 		}
