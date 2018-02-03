@@ -73,6 +73,9 @@ func (d *Diff) Humanize() string {
 	diffInHours := d.InHours()
 
 	if diffInHours <= 22 {
+		if diffInHours == 1 {
+			return fmt.Sprintf("%d hour", diffInHours)
+		}
 		return fmt.Sprintf("%d hours", diffInHours)
 	} else if diffInHours <= 36 {
 		return "a day"
@@ -81,6 +84,9 @@ func (d *Diff) Humanize() string {
 	diffInDays := d.InDays()
 
 	if diffInDays <= 30 {
+		if diffInDays == 1 {
+			return fmt.Sprintf("%d day", diffInDays)
+		}
 		return fmt.Sprintf("%d days", diffInDays)
 	} else if diffInDays <= 31 {
 		return "about 1 month"
@@ -89,7 +95,12 @@ func (d *Diff) Humanize() string {
 	diffInMonths := d.InMonths()
 
 	if diffInMonths <= 12 {
-		return fmt.Sprintf("%d month", diffInMonths)
+		// always add 1 in diff
+		diffInMonths = diffInMonths + 1
+		if diffInMonths == 1 {
+			return fmt.Sprintf("%d month", diffInMonths)
+		}
+		return fmt.Sprintf("%d months", diffInMonths)
 	} else if diffInMonths <= 13 {
 		return "about 1 year"
 	}
