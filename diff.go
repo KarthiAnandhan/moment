@@ -25,7 +25,8 @@ func (d *Diff) InHours() int {
 }
 
 func (d *Diff) InDays() int {
-	return int(math.Floor(float64(d.InSeconds()) / 86400))
+	days := float64(d.InSeconds()) / 86400
+	return round(days) //include today also in the diff
 }
 
 // This depends on where the weeks fall?
@@ -37,7 +38,8 @@ func (d *Diff) InMonths() int {
 	// 400 years have 146097 days (taking into account leap year rules)
 	// 400 years have 12 months === 4800
 	days := d.InDays()
-	return days * 4800 / 146097
+	months := float64(days) * 0.0328
+	return round(months)
 }
 
 func (d *Diff) InYears() int {
@@ -84,8 +86,6 @@ func (d *Diff) Humanize() string {
 	diffInDays := d.InDays()
 
 	if diffInDays <= 30 {
-		// always add 1 in diff
-		diffInDays = diffInDays + 1
 		if diffInDays == 1 {
 			return fmt.Sprintf("%d day", diffInDays)
 		}
@@ -97,8 +97,6 @@ func (d *Diff) Humanize() string {
 	diffInMonths := d.InMonths()
 
 	if diffInMonths <= 12 {
-		// always add 1 in diff
-		diffInMonths = diffInMonths + 1
 		if diffInMonths == 1 {
 			return fmt.Sprintf("%d month", diffInMonths)
 		}
@@ -107,4 +105,12 @@ func (d *Diff) Humanize() string {
 		return "about 1 year"
 	}
 	return "many years"
+}
+
+// round converts 2.7 months to 3 months and 2.2 days to 2 days
+func round(val float64) int {
+	if val < 0 {
+		return int(val - 0.5)
+	}
+	return int(val + 0.5)
 }
